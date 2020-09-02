@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="container">
+  <h2 style="text-align:left;background-color:#99d8c9" > Phenotype data analyis</h2>
+  <div class="content-section">
+    <div class="row">
+        <div class="col-sm-6">
+          <div class="content-section">
+            <legend class="border-bottom mb-4">Slection based on gene ID</legend>
+              <form id="gene_input_form"  method="POST" action="" enctype="multipart/form-data">
+                  <!-- {{ form.hidden_tag()}} -->
+
+                  <fieldset class="form-group">
+                  <!-- <legend class="border-bottom mb-4"> gene Input </legend> -->
+
+                    <div class="form-group row">
+                        {{ form.geneid.label(class="col-sm-2 col-form-label")}}
+                        <div class="col-sm-10">
+                            {{ form.geneid(class="form-control is-invalid",placeholder="PBANKA_0407500")}}
+                        </div>
+                        <!-- <div class="col-sm-4">
+                            {{ form.submit(class="btn btn-outline-info")}}
+                        </div> -->
+                    </div>
+
+                    <div class="form-group row">
+                        {{ form.genelist.label(class="col-sm-2 col-form-label")}}
+                        <div class="col-sm-10">
+                            {{ form.genelist(class="form-control is-invalid",placeholder="Gene IDs")}}
+                        </div>
+                        <fieldset class="form-group">
+                          <legend class="border-bottom mb-4">Stage-specific phenoype</legend>
+                        {% if form.choices.errors %}
+                        <div class="invalid-feedback">
+                          {% for error in form.choices.errors %}
+                            <span>{{ error }}</span>
+                          {% endfor %}
+                          </div>
+                        {% endif %}
+                        {% for choice in form.choices %}
+                          <div class="form-check">
+                            {{ choice(class="form-check-input") }}
+                            {{ choice.label(class="form-check-label") }}
+                          </div>
+                        {% endfor %}
+                          </fieldset>
+
+                    </div>
+                  <div class="form-group">
+                      {{ form.submit(class="btn btn-outline-info")}}
+                  </div>
+                </fieldset>
+
+
+              </form>
+              <fieldset class="form-group">
+                <!-- <legend class="border-bottom mb-4"> </legend> -->
+              <div>
+                <div class="col-sm-12">
+                  <div class="content-section">
+
+                 {{ form.genefile.label() }}
+                  {{ form.genefile() }}
+                  </div>
+              </div>
+            </div>
+            </fieldset>
+          </div>
+
+
+        </div>
+
+          <div class="col-sm-6">
+            <div class="content-section">
+              <legend class="border-bottom mb-4">Relative growth rate</legend>
+
+                <form id="filter_input_form"  method="POST" action="" enctype="multipart/form-data" >
+                    {{ form2.hidden_tag()}}
+
+                    <fieldset class="form-group">
+                    <!-- <legend class="border-bottom mb-4"> gene Input </legend> -->
+
+                      <div class="form-group row">
+                          {{ form2.male_ferti_gr.label(class="col-sm-2 col-form-label")}}
+
+
+
+                          <div class="col-sm-8">
+                            {{ form2.male_ferti_gr(size=10)}}
+                            {{ form2.male_ferti_le(size=10)}}
+
+                          </div>
+
+                      </div>
+
+                      <div class="form-group row">
+                          {{ form2.female_ferti_gr.label(class="col-sm-2 col-form-label")}}
+
+                          <div class="col-sm-8">
+                              {{ form2.female_ferti_gr(size=10)}}
+
+                              {{ form2.female_ferti_le(size=10)}}
+                          </div>
+
+                      </div>
+
+
+                      <div class="form-group row">
+                          {{ form2.male_gam_gr.label(class="col-sm-2 col-form-label")}}
+
+                          <div class="col-sm-8">
+                              {{ form2.male_gam_gr(size=10)}}
+                              {{ form2.male_gam_le(size=10)}}
+                          </div>
+
+                      </div>
+
+                      <div class="form-group row">
+                          {{ form2.female_gam_gr.label(class="col-sm-2 col-form-label")}}
+
+                          <div class="col-sm-8">
+
+                              {{ form2.female_gam_gr(size=10)}}
+                              {{ form2.female_gam_le(size=10)}}
+                          </div>
+
+                      </div>
+
+
+
+
+                      <div class="form-group row">
+                          {{ form2.blood_gr.label(class="col-sm-2 col-form-label")}}
+                          <div class="col-sm-8">
+
+                              {{ form2.blood_gr(size=10)}}
+                              {{ form2.blood_le(size=10 )}}
+                          </div>
+
+                      </div>
+
+
+                      <div class="form-group row">
+                          {{ form2.liver_gr.label(class="col-sm-2 col-form-label")}}
+
+                          <div class="col-sm-8">
+                              {{ form2.liver_gr(size=10)}}
+                              {{ form2.liver_le(size=10)}}
+                          </div>
+
+                      </div>
+
+                    <div class="form-group">
+                        {{ form2.filter(class="btn btn-outline-info")}}
+                    </div>
+                  </fieldset>
+
+
+                </form>
+              </div>
+
+            </div>
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+<div class="container" class="content-section">
+    <div class="row"
+        <div class="col-md-8">
+            <div class="chart" id="pheno_table">
+                <!-- <script>
+                    var graphs2 = {{plot2 | safe}};
+
+                    Plotly.plot('dendograph',graphs2,{});
+
+                </script> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" class="content-section">
+  <div class="row">
+      <button id="download_button" type="button" class="btn btn-outline-success">Download data</button>
+  </div>
+</div>
+
+
+
+<div class="container" style="padding: 10px; ">
+    <div id="toolbar"></div>
+    <table
+      id="pheno_table_df"
+      data-toggle="true"
+      data-toolbar="#toolbar"
+      data-search="true"
+      data-show-columns="true"
+      data-pagination="true"
+      data-height="500">
+    </table>
+  </div>
+
+<!-- <div class="container" >
+
+        <div class="col-md-12">
+    <table
+      id="pheno_table_df"
+      data-toggle="true"
+      data-search="true"
+      data-show-columns="true"
+      data-pagination="true"
+      data-height="500">
+    </table>
+</div>
+    </div> -->
+
+
+<div class="container" class="content-section">
+    <div class="row"
+        <div class="col-md-8">
+            <div class="chart" id="all_pheno_fig_id">
+                <script>
+
+                    var all_pheno_graph = {{ all_pheno_fig | safe}};
+
+                    Plotly.plot('all_pheno_fig_id',all_pheno_graph,{});
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container" class="content-section">
+    <div class="row"
+        <div class="col-md-8">
+            <div class="chart" id="fertility_fig_id">
+                <script>
+
+                    var fertility_graph = {{ fertility_fig | safe}};
+
+                    Plotly.plot('fertility_fig_id',fertility_graph,{});
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container" class="content-section">
+    <div class="row"
+        <div class="col-md-8">
+            <div class="chart" id="gam_fig_id">
+                <script>
+
+                    var gam_graph = {{ gam_fig | safe}};
+
+                    Plotly.plot('gam_fig_id',gam_graph,{});
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container" class="content-section">
+    <div class="row"
+        <div class="col-md-8">
+            <div class="chart" id="liver_fig_id">
+                <script>
+
+                    var liver_graph = {{ liver_fig | safe}};
+
+                    Plotly.plot('liver_fig_id',liver_graph,{});
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container" class="content-section">
+    <div class="row"
+        <div class="col-md-8">
+            <div class="chart" id="blood_fig_id">
+                <script>
+
+                    var blood_graph = {{ blood_fig | safe}};
+
+                    Plotly.plot('blood_fig_id',blood_graph,{});
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+      <!-- <legend class="border-bottom mb-4"> gene Input </legend> -->
+
+
+
+
+
+
+
+{% endblock content %}
+<!-- </html> -->

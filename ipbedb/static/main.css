@@ -1,0 +1,21 @@
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 2px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+
+/* .ui-menu-item a.ui-state-focus {
+background: #faa;
+} */
+
+
+.content-section2 {
+  background: #bdbdbd;
+  padding: 10px 20px;
+  border: 2px solid #bdbdbd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
